@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пётр Великий - Исторический портал</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            margin-bottom: 40px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .main-content {
+            flex: 2;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .quote-section {
+            flex: 1;
+            background: #f0f4f8;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .peter-portrait {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: 5px solid white;
+        }
+        
+        .quote {
+            font-style: italic;
+            font-size: 1.1em;
+            line-height: 1.6;
+            text-align: center;
+            position: relative;
+            padding: 20px;
+        }
+        
+        .quote:before {
+            content: '"';
+            font-size: 3em;
+            color: #4a6fa5;
+            position: absolute;
+            left: -10px;
+            top: -20px;
+            opacity: 0.3;
+        }
+        
+        .quote:after {
+            content: '"';
+            font-size: 3em;
+            color: #4a6fa5;
+            position: absolute;
+            right: -10px;
+            bottom: -40px;
+            opacity: 0.3;
+        }
+        
+        .quote-author {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: right;
+            width: 100%;
+        }
+
+        /* Стили для чат-бота */
+        .chat-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-button:hover {
+            background-color: #3a5a8f;
+            transform: scale(1.1);
+        }
+        
+        .chat-modal {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            max-height: 500px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            flex-direction: column;
+            overflow: hidden;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        
+        .chat-header {
+            padding: 16px;
+            background-color: #4a6fa5;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .chat-body {
+            padding: 16px;
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+        
+        .chat-message {
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        
+        .bot-message {
+            background-color: #f0f0f0;
+            align-self: flex-start;
+        }
+        
+        .user-message {
+            background-color: #4a6fa5;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        
+        .chat-input-container {
+            padding: 12px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+        }
+        
+        .chat-input {
+            flex-grow: 1;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+        }
+        
+        .chat-send {
+            margin-left: 8px;
+            padding: 10px 16px;
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .chat-send:hover {
+            background-color: #3a5a8f;
+        }
+        
+        .hints-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        .hint {
+            background-color: #e0e8f5;
+            color: #2a4a7e;
+            padding: 4px 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            white-space: nowrap;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .hint:hover {
+            background-color: #d0d8e5;
+            transform: translateY(-1px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .chat-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .chat-modal {
+                background-color: #2d2d2d;
+                color: #e0e0e0;
+            }
+            
+            .chat-header {
+                background-color: #3a5a8f;
+            }
+            
+            .bot-message {
+                background-color: #3a3a3a;
+            }
+            
+            .user-message {
+                background-color: #3a5a8f;
+            }
+            
+            .chat-input-container {
+                border-top-color: #444;
+            }
+            
+            .chat-input {
+                background-color: #3a3a3a;
+                color: #e0e0e0;
+                border-color: #444;
+            }
+            
+            .hint {
+                background-color: #3a4a6a;
+                color: #d0e0ff;
+            }
+            
+            .hint:hover {
+                background-color: #4a5a7a;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            header {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .chat-modal {
+                width: 90%;
+                right: 5%;
+                bottom: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Пётр I Великий</h1>
+            <div class="subtitle">Первый Император Всероссийский | Реформатор | Основатель Санкт-Петербурга</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="content">
+            <div class="main-content">
+                <h2>Историческая справка</h2>
+                <p>Пётр I Алексеевич, прозванный Великим (1672-1725) — последний царь всея Руси (с 1682 года) и первый Император Всероссийский (с 1721 года).</p>
+                
+                <p>Представитель династии Романовых, Пётр был провозглашён царём в 10-летнем возрасте, стал править самостоятельно с 1689 года. Формальным соправителем Петра был его брат Иван (до своей смерти в 1696 году).</p>
+                
+                <p>С юных лет проявляя интерес к наукам и заграничному образу жизни, Пётр первым из русских царей совершил длительное путешествие в страны Западной Европы. По возвращении в 1698 году Пётр развернул масштабные реформы российского государства и общественного уклада.</p>
+                
+                <h3>Основные достижения:</h3>
+                <ul>
+                    <li>Победа в Северной войне и выход к Балтийскому морю</li>
+                    <li>Основание Санкт-Петербурга (1703)</li>
+                    <li>Провозглашение России империей (1721)</li>
+                    <li>Создание регулярной армии и флота</li>
+                    <li>Реформа государственного управления</li>
+                    <li>Развитие промышленности и торговли</li>
+                    <li>Реформа образования и создание Академии наук</li>
+                </ul>
+            </div>
+            
+            <div class="quote-section">
+                <img src="PeterI.jpg" alt="Портрет Петра I" class="peter-portrait">
+                <div class="quote">
+                    Я предчувствую, что россияне когда-нибудь, а может быть, при жизни нашей пристыдят самые просвещенные народы успехами своими в науках, неутомимостью в трудах и величеством твердой и громкой славы.
+                </div>
+                <div class="quote-author">— Пётр I Великий</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Чат-бот -->
+    <button class="chat-button">💬</button>
+
+    <div class="chat-modal" id="chatModal">
+        <div class="chat-header">
+            <span>Чат о Петре I</span>
+            <button class="chat-close">&times;</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-message bot-message">
+                Привет! Я могу рассказать вам о Петре Великом. Напишите ключевое слово или выберите вопрос:
+                <div class="hints-container">
+                    <button class="hint" onclick="sendHint('родился')">родился</button>
+                    <button class="hint" onclick="sendHint('царём')">царём</button>
+                    <button class="hint" onclick="sendHint('титул')">титул</button>
+                    <button class="hint" onclick="sendHint('правил')">правил</button>
+                    <button class="hint" onclick="sendHint('умер')">умер</button>
+                    <button class="hint" onclick="sendHint('реформы')">реформы</button>
+                    <button class="hint" onclick="sendHint('армия')">армия</button>
+                    <button class="hint" onclick="sendHint('табель')">табель</button>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Напишите слово...">
+            <button class="chat-send" id="chatSend">→</button>
+        </div>
+    </div>
+
+    <script>
+        // Элементы интерфейса
+        const chatButton = document.querySelector('.chat-button');
+        const chatModal = document.getElementById('chatModal');
+        const chatClose = document.querySelector('.chat-close');
+        const chatBody = document.getElementById('chatBody');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend = document.getElementById('chatSend');
+        
+        // База знаний о Петре I
+        const knowledgeBase = {
+            "родил": "Пётр I родился 9 июня (30 мая по старому стилю) 1672 года.",
+            "цар": "Он стал царём в 1682 году в возрасте 10 лет, но до 1696 года делил власть со своим братом Иваном V.",
+            "титул": "В 1721 году он провозгласил себя императором, и Россия стала империей.",
+            "правил": "Он правил 43 года: с 1682 по 1725 год.",
+            "умер": "Он умер 8 февраля 1725 года от воспаления мочевого пузыря (по другой версии – от последствий простуды).",
+            "реформ": "Создание регулярной армии и флота, реформа государственного управления, церковная реформа (упразднение патриаршества), введение Табели о рангах, развитие промышленности.",
+            "арми": "Он ввёл рекрутскую повинность, создал регулярную армию по европейскому образцу и построил мощный флот.",
+            "табел": "Табель о рангах (1722 г.) — закон, определявший систему чинов и порядок продвижения по службе для военных и гражданских служащих.",
+            "управл": "Он заменил приказы коллегиями, создал Сенат и разделил страну на губернии.",
+            "церков": "Он упразднил патриаршество и создал Святейший Синод, подчинив церковь государству.",
+            "войн": "Северная война (1700–1721), Азовские походы (1695–1696), Прутский поход (1711), война с Персией (1722–1723).",
+            "северн": "Итог Северной войны: Россия победила Швецию, получила выход к Балтийскому морю и стала империей.",
+            "петербург": "Санкт-Петербург основан 27 мая 1703 года (по новому стилю 16 мая).",
+            "столиц": "Пётр перенёс столицу в Петербург, чтобы укрепить связь с Европой и иметь выход к морю.",
+            "посольств": "Великое посольство (1697–1698) — Пётр инкогнито путешествовал по Европе, изучая кораблестроение и другие науки.",
+            "рост": "Рост Петра I составлял около 2 метров (203–204 см).",
+            "плотник": "Пётр работал плотником, так как ценил труд и хотел лично освоить ремёсла, чтобы подавать пример подданным.",
+            "бород": "Он ввёл налог на бороды, чтобы привить европейскую моду.",
+            "екатерин": "Екатерина I — вторая жена Петра, бывшая служанка Марта Скавронская, ставшая императрицей после его смерти.",
+            "сын": "Царевич Алексей был осуждён за измену и умер в тюрьме (возможно, от пыток).",
+            "мод": "Пётр заставлял дворян носить европейскую одежду и брить бороды.",
+            "праздник": "Он ввёл празднование Нового года 1 января и ассамблеи (светские вечеринки).",
+            "календар": "Пётр ввёл юлианский календарь (вместо византийского).",
+            "наук": "Его интересовали: кораблестроение, медицина, артиллерия, навигация.",
+            "кунсткамер": "Кунсткамера создана для сбора научных и анатомических коллекций в целях просвещения.",
+            "памятник": "Самые известные памятники: «Медный всадник» в Петербурге, памятники в Архангельске, Москве.",
+            "влияни": "Пётр превратил Россию в мощную европейскую державу с сильной армией и флотом.",
+            "называл": 'Его называли: "Великий", "Отец Отечества", "Антихрист" (раскольниками).',
+            "город": "Он основал: Санкт-Петербург, Таганрог, Петрозаводск и другие города.",
+            "противоречи": "Пётр был жестоким реформатором, но его преобразования сделали Россию великой державой."
+        };
+
+        // Открытие/закрытие чата
+        chatButton.addEventListener('click', function() {
+            chatModal.classList.toggle('active');
+            if (chatModal.classList.contains('active')) {
+                chatInput.focus();
+            }
+        });
+        
+        chatClose.addEventListener('click', function() {
+            chatModal.classList.remove('active');
+        });
+        
+        // Отправка подсказки
+        function sendHint(hint) {
+            chatInput.value = hint;
+            sendMessage();
+        }
+        
+        // Отправка сообщения
+        function sendMessage() {
+            const message = chatInput.value.trim().toLowerCase();
+            if (message) {
+                // Добавляем сообщение пользователя
+                addMessage(message, 'user');
+                
+                // Очищаем поле ввода
+                chatInput.value = '';
+                
+                // Ищем ответ
+                setTimeout(() => {
+                    let answer = "Уточните вопрос. Вот что я знаю:";
+                    let hintsHtml = "";
+                    let found = false;
+                    
+                    // Проверяем все ключи в базе знаний
+                    for (const [key, value] of Object.entries(knowledgeBase)) {
+                        if (message.includes(key)) {
+                            answer = value;
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!found) {
+                        // Создаем подсказки
+                        const keys = Object.keys(knowledgeBase);
+                        const shuffled = keys.sort(() => 0.5 - Math.random());
+                        
+                        hintsHtml = '<div class="hints-container">';
+                        shuffled.slice(0, 12).forEach(key => {
+                            hintsHtml += `<button class="hint" onclick="sendHint('${key}')">${key}</button>`;
+                        });
+                        hintsHtml += '</div>';
+                    }
+                    
+                    addMessage(answer + (hintsHtml ? `<div style="margin-top:8px">${hintsHtml}</div>` : ''), 'bot');
+                }, 500);
+            }
+        }
+        
+        // Добавление сообщения в чат
+        function addMessage(text, sender) {
+            const message = document.createElement('div');
+            message.className = `chat-message ${sender}-message`;
+            message.innerHTML = text;
+            chatBody.appendChild(message);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        
+        // Обработчики отправки
+        chatSend.addEventListener('click', sendMessage);
+        
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Глобальная функция для подсказок
+        window.sendHint = sendHint;
+    </script>
+</body>
+</html>
